@@ -1,0 +1,58 @@
+.chartContainer {
+  position: relative;
+  width: 98%;
+  height: 90%;
+  align-self: center;
+  padding-bottom: 4px;
+}
+
+.tickerList {
+  width: 100%;
+  height: 100%;
+  overflow: overlay;
+  color: rgb(181, 141, 190);
+  border: 4px solid rgb(80, 57, 87);
+  border-style: none none none double;
+}
+
+.ticker {
+  /* border: 1px solid rgb(80, 57, 87);
+  border-style: none none solid none; */
+  padding: 0;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  width: 95%;
+  text-align: left;
+}
+
+.ticker:hover {
+  color: rgb(230, 195, 130);
+}
+
+.tickerHead {
+  border: 1px solid rgb(80, 57, 87);
+  border-style: none none solid none;
+  position: relative;
+}
+
+.tickerRow {
+  padding-left: 8px;
+  width: 360px;
+}
+
+.tickerKey {
+  width: 160px;
+}
+
+.tickerVol {
+  padding-left: 8px;
+  width: 160px;
+}
+
+.tickerChange {
+  width: 160px;
+}
+
+.alt2 {
+  background: linear-gradient(57deg, rgb(134 100 145 / 10%) 15%, rgba(0,212,255,0) 70%);
+}

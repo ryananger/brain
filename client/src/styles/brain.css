@@ -1,0 +1,38 @@
+
+.visualContainer {
+  border: 1px solid rgb(95, 67, 104);
+  margin: 32px;
+  margin-left: 0;
+  margin-right: 0;
+  width: 74%;
+  text-align: center;
+  justify-content: space-between;
+}
+
+.brainHeader {
+  border: inherit;
+  border-style: none none solid none;
+}
+
+.brainButtons {
+  width: 20vw;
+  max-width: 248px;
+}
+
+.brainButton {
+  width: 120px;
+  margin: 4px;
+  box-shadow: none;
+  background-color: transparent;
+  border: 1px solid rgb(95, 67, 104);
+  color: rgb(181, 141, 190);
+}
+
+.brainDefault {
+  margin: 4px;
+  color: rgb(181, 141, 190);
+}
+
+.brainButton:hover {
+  color:rgb(230, 195, 130)
+}
