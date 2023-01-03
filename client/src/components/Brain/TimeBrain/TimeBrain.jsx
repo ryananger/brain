@@ -2,40 +2,38 @@ import React, {useState, useEffect} from 'react';
 import * as brain from 'brain.js';
 
 import helpers  from '../../util/helpers.js';
-// import Draw     from './chart/Draw.jsx';
+import Draw     from './chart/Draw.jsx';
+import br       from './br.js';
 
-const net = new brain.recurrent.LSTMTimeStep({
-  inputSize: 1,
-  outputSize: 1,
-});
+const {net, options, max, data} = br;
 
-const options = {
-  iterations: 20000,
-  log: true,
-  logPeriod: 1000,
-  errorThresh: 0.01
-};
+const Brain = function() {
+  const [predicted, setPredicted] = useState([]);
 
-const Brain = function({data}) {
+  const normalized = data.map(function(entry) {
+    return helpers.trunc(entry/max);
+  });
+
   var trainBrain = function() {
-    net.train([data], options);
+    net.train([normalized], options);
 
     console.log('Training complete.');
-
-    let ran = net.run(data);
-    let forecast = net.forecast(data, 10);
-
-    console.log(ran, forecast);
   };
 
   var testBrain = function() {
-    //net.run();
+    let forecast = net.forecast(normalized.slice(0, 10), 20);
+    var forecasted = [...data.slice(0, 10)];
+
+    forecast.map(function(entry) {
+      forecasted.push(entry * max);
+    })
+
+    setPredicted(forecasted);
   };
 
   var renderDraw = function() {
     if (data[0]) {
-      // return <Draw />
-      return;
+      return <Draw data={data} predicted={predicted}/>
     }
   };
 
@@ -51,6 +49,7 @@ const Brain = function({data}) {
   return (
     <div className='visualContainer v'>
       <div className='brainHeader h'>
+        <h3>brain.time</h3>
         {renderButtons()}
       </div>
       {renderDraw()}
