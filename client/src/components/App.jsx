@@ -11,7 +11,7 @@ const App = function() {
   return (
     <div id='app'>
       <div className='main h'>
-        <Interface />
+        {/* <Interface /> */}
         <TimeBrain />
       </div>
     </div>

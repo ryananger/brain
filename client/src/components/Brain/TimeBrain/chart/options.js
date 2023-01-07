@@ -5,11 +5,11 @@ var colors = {
   purple2: 'rgb(75, 54, 82)'
 };
 
-const scales = {
+var scales = {
   x: {
     ticks: {
       align: 'center',
-      color: colors.purple1
+      color: 'rgb(122, 48, 48)'
     },
     border: {
       display: false
@@ -21,19 +21,19 @@ const scales = {
   y: {
     position: 'right',
     ticks: {
-      color: colors.purple1
+      color: 'rgb(122, 48, 48)'
     },
     border: {
       display: false
     },
     grid: {
-      color: colors.purple2
-    },
-    max: 30
+      color: 'rgba(136, 86, 86, 0.2)'
+    }
   }
 };
 
-const options = {
+var options = {
+  animation: false,
   responsive: true,
   maintainAspectRatio: false,
   interaction: {
@@ -46,8 +46,8 @@ const options = {
   scales: scales,
   fill: false,
   radius: 0,
-  borderWidth: 1,
-  borderColor: colors.yellow1
+  borderWidth: 2,
+  borderColor: 'rgb(122, 48, 48)'
 };
 
 

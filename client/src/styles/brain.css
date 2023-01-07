@@ -1,38 +1,49 @@
 
 .visualContainer {
-  border: 1px solid rgb(95, 67, 104);
+  background-color: rgb(255, 239, 195);
+  border: 2px solid rgb(122, 48, 48);
   margin: 32px;
   margin-left: 0;
   margin-right: 0;
-  width: 74%;
+  width: 100%;
+  height: 80vh;
   text-align: center;
   justify-content: space-between;
+  box-shadow: 0 4px 8px rgba(122, 48, 100, 0.2);
+}
+
+.chartContainer {
+  position: relative;
+  width: 98%;
+  height: 90%;
+  align-self: center;
+  padding-bottom: 4px;
 }
 
 .brainHeader {
-  border: inherit;
+  border: 1px solid;
   border-style: none none solid none;
 }
 
 .brainButtons {
-  width: 20vw;
-  max-width: 248px;
+  max-width: 40vw;
 }
 
-.brainButton {
+.brainButton, select {
+  outline: none;
   width: 120px;
   margin: 4px;
   box-shadow: none;
-  background-color: transparent;
-  border: 1px solid rgb(95, 67, 104);
-  color: rgb(181, 141, 190);
+  background-color: rgb(255, 246, 227);
+  border: 1px solid rgb(122, 48, 48);
+  color: rgb(122, 48, 48);
 }
 
 .brainDefault {
   margin: 4px;
-  color: rgb(181, 141, 190);
+  color: rgb(122, 48, 48);
 }
 
 .brainButton:hover {
-  color:rgb(230, 195, 130)
+  font-weight: bolder;
 }
