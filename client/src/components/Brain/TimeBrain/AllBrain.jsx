@@ -83,7 +83,7 @@ const Brain = function() {
 
     var thisNum = num;
 
-    setTimeout(function() {trainTestLoop(null, thisNum + 1)}, 10);
+    setTimeout(function() {trainTestLoop(null, thisNum + 1)}, 100);
   };
 
   var trainTestLoop = function(e, num) {
