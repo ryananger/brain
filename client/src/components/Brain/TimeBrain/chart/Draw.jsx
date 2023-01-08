@@ -14,8 +14,8 @@ import {
 import { Line } from 'react-chartjs-2';
 
 import options from './options.js';
-import weather from '../weatherData.js';
-import stocks  from '../stockData.js';
+import weather from '../sampleData/weatherData.js';
+import stocks  from '../sampleData/stockData.js';
 
 ChartJS.register(
   LinearScale,

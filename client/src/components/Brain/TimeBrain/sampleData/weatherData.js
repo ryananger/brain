@@ -66,4 +66,6 @@ var data = [
   42.2
 ];
 
-export default {labels, data};
+var max = 60;
+
+export default {labels, data, max};

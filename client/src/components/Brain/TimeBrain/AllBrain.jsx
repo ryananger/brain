@@ -4,43 +4,44 @@ import * as brain from 'brain.js';
 import helpers   from '../../util/helpers.js';
 import Draw      from './chart/Draw.jsx';
 import br        from './br.js';
-import weather   from './weatherData.js';
-import stocks    from './stockData.js';
+import weather   from './sampleData/weatherData.js';
+import stocks    from './sampleData/stockData.js';
+import line      from './sampleData/lineData.js';
 
-var {createNets, options, max, lineData} = br;
+const {createNets, options} = br;
+const initNets    = createNets(3);
 
-const lineMax     = max;
+const lineData    = line.data;
+const lineMax     = line.max;
 const stockData   = stocks.data;
 const stockMax    = stocks.max;
 const weatherData = weather.data;
-const weatherMax  = 60;
-const initNets    = createNets(3);
+const weatherMax  = weather.max;
 
 const Brain = function() {
-  const [predicted, setPredicted] = useState([]);
-  const [pAverage, setAverage]    = useState([]);
-  const [showAverage, toggleAverage] = useState(false);
+  const [predicted, setPredicted]  = useState([]);
+  const [pAverage, setAverage]     = useState([]);
+  const [averageOn, toggleAverage] = useState(false);
 
   const [data, setData] = useState(stockData);
   const [max,  setMax]  = useState(stockMax);
   const [nets, setNets] = useState(initNets);
 
   const [dataType, setType] = useState('stock');
-  const trainLength = function() {
-    if (dataType === 'stock') {
-      return 40;
-    } else {
-      return 20;
-    }
-  }();
 
-  const normalized = data.slice(0, trainLength).map(function(entry) {
+  const trainLength  = dataType === 'stock' ? 40 : 20;
+  const trainingData = data.slice(0, trainLength);
+
+  const normalized = trainingData.map(function(entry) {
     return helpers.trunc(entry/max);
   });
 
   var trainBrain = function(num) {
     nets.map(function(net, i) {
       var trained = net.train([normalized], options);
+
+      // net.train returns an object: {iteration count, error threshold}
+      // console.log(trained);
     })
 
     testBrain(num);
@@ -49,9 +50,10 @@ const Brain = function() {
   var testBrain = function(num) {
     let predictions = [];
 
+    // for each neural net, run forecast and push results to predicted
     nets.map(function(net, i) {
-      let forecast = net.forecast(normalized.slice(0, trainLength), 20);
-      let forecasted = [...data.slice(0, trainLength)];
+      let forecast = net.forecast(normalized, 20);
+      let forecasted = [...trainingData];
 
       forecast.map(function(entry) {
         forecasted.push(entry * max);
@@ -60,6 +62,7 @@ const Brain = function() {
       predictions.push(forecasted);
     });
 
+    // get average of predictions
     let averages = [];
 
     for (var i = 0; i < predictions[0].length; i++) {
@@ -74,6 +77,7 @@ const Brain = function() {
       averages.push(average);
     }
 
+    // update state and start next loop
     setAverage([averages]);
     setPredicted(predictions);
 
@@ -88,7 +92,7 @@ const Brain = function() {
     if (num < 100) {
       trainBrain(num);
     } else {
-      alert('Training complete.')
+      alert('Training complete.');
     }
   };
 
@@ -119,22 +123,8 @@ const Brain = function() {
     toggleAverage(false);
   };
 
-  var renderButtons = function() {
-    return (
-      <div className='brainButtons h'>
-        <select id='dataset' onChange={changeData}>
-          <option value={'stock'}>  stock</option>
-          <option value={'weather'}>weather</option>
-          <option value={'line'}>   line</option>
-        </select>
-        <button className='brainButton' onClick={trainTestLoop}>train</button>
-        <button className='brainButton' onClick={()=>{toggleAverage(!showAverage)}}>toggle avg.</button>
-      </div>
-    )
-  };
-
   var renderChart = function() {
-    if (!showAverage) {
+    if (!averageOn) {
       return <Draw dataType={dataType} data={data} predicted={predicted}/>
     } else {
       return <Draw dataType={dataType} data={data} predicted={pAverage}/>
@@ -145,7 +135,15 @@ const Brain = function() {
     <div className='visualContainer v'>
       <div className='brainHeader h'>
         <h3>brain.js - timeseries</h3>
-        {renderButtons()}
+        <div className='brainButtons h'>
+          <select id='dataset' onChange={changeData}>
+            <option value={'stock'}>  stock</option>
+            <option value={'weather'}>weather</option>
+            <option value={'line'}>   line</option>
+          </select>
+          <button className='brainButton' onClick={trainTestLoop}>train</button>
+          <button className='brainButton' onClick={()=>{toggleAverage(!averageOn)}}>toggle avg.</button>
+        </div>
       </div>
       {renderChart()}
     </div>

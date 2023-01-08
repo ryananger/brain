@@ -28,15 +28,4 @@ const options = {
   errorThresh: 0.0001
 };
 
-const max = 30;
-const lineData = function() {
-  var data = [];
-
-  for (var i = 1; i <= max; i++) {
-    data.push(i);
-  }
-
-  return data;
-}();
-
-export default {createNets, options, max, lineData};
+export default {createNets, options};
