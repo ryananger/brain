@@ -1,23 +1,23 @@
 import React, {useState, useEffect} from 'react';
 import * as brain from 'brain.js';
 
-import helpers   from '../../util/helpers.js';
-import Draw      from './chart/Draw.jsx';
-import br        from './br.js';
-import weather   from './sampleData/weatherData.js';
+import helpers from '../../util/helpers.js';
+import Draw    from './chart/Draw.jsx';
+import br      from './br.js';
+import weather from './sampleData/weatherData.js';
+
+const data = weather.data;
+const max  = weather.max;
 
 const {createNets, options} = br;
 const nets = createNets(3);
 
 const Brain = function() {
   const [predicted, setPredicted]  = useState([]);
-  const [pAverage, setAverage]     = useState([]);
+  const [pAverage,  setAverage]    = useState([]);
   const [averageOn, toggleAverage] = useState(false);
 
-  const data = weather.data;
-  const max  = weather.max;
-  const dataType = 'weather';
-
+  // define training dataset length, slice from data, then normalize
   const trainLength  = 20;
   const trainingData = data.slice(0, trainLength);
 
@@ -26,6 +26,7 @@ const Brain = function() {
   });
 
   var trainBrain = function(num) {
+    // train each neural net on the normalized dataset, with options defined in br.js;
     nets.map(function(net, i) {
       net.train([normalized], options); // returns an object: {iterations, error};
     })
@@ -48,20 +49,7 @@ const Brain = function() {
       predictions.push(forecasted);
     });
 
-    // get average of predictions
-    let averages = [];
-
-    for (var i = 0; i < predictions[0].length; i++) {
-      var sum = 0;
-      var average;
-
-      predictions.map(function(entry) {
-        sum += entry[i];
-      })
-
-      average = sum/predictions.length;
-      averages.push(average);
-    }
+    let averages = helpers.getAverages(predictions);
 
     // update state and start next loop
     setAverage([averages]);
@@ -84,9 +72,9 @@ const Brain = function() {
 
   var renderChart = function() {
     if (!averageOn) {
-      return <Draw dataType={dataType} data={data} predicted={predicted}/>
+      return <Draw dataType={'weather'} data={data} predicted={predicted}/>
     } else {
-      return <Draw dataType={dataType} data={data} predicted={pAverage}/>
+      return <Draw dataType={'weather'} data={data} predicted={pAverage}/>
     }
   };
 
