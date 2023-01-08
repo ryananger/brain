@@ -1,3 +1,4 @@
 /node_modules/
+/client/public/bundle.js
 .env
 /progress_caps/demo.mp4
