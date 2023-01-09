@@ -25,6 +25,10 @@
   border-style: none none solid none;
 }
 
+.trainingInfo {
+  align-items: center;
+}
+
 .brainButtons {
   max-width: 40vw;
 }

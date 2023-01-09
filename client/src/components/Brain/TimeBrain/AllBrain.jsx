@@ -12,11 +12,12 @@ const {createNets, options} = br;
 const initNets    = createNets(3);
 
 const lineData    = line.data;
-const lineMax     = line.max;
 const stockData   = stocks.data;
 const stockMax    = stocks.max;
 const weatherData = weather.data;
 const weatherMax  = weather.max;
+
+var iterations = '';
 
 const Brain = function() {
   const [predicted, setPredicted]  = useState([]);
@@ -31,12 +32,13 @@ const Brain = function() {
 
   const trainLength  = dataType === 'stock' ? 40 : 20;
   const trainingData = data.slice(0, trainLength);
+  const [training, isTraining] = useState(false);
 
   const normalized = trainingData.map(function(entry) {
     return helpers.trunc(entry/max);
   });
 
-  var trainBrain = function(num) {
+  var trainBrain = function() {
     nets.map(function(net, i) {
       var trained = net.train([normalized], options);
 
@@ -44,10 +46,10 @@ const Brain = function() {
       // console.log(trained);
     })
 
-    testBrain(num);
+    testBrain();
   };
 
-  var testBrain = function(num) {
+  var testBrain = function() {
     let predictions = [];
 
     // for each neural net, run forecast and push results to predicted
@@ -81,18 +83,25 @@ const Brain = function() {
     setAverage([averages]);
     setPredicted(predictions);
 
-    var thisNum = num;
-
-    setTimeout(function() {trainTestLoop(null, thisNum + 1)}, 100);
+    setTimeout(trainTestLoop, 100);
   };
 
-  var trainTestLoop = function(e, num) {
-    var num = num || 0;
+  var trainTestLoop = function() {
+    if (typeof iterations === 'string') {
+      iterations = 0;
+    }
 
-    if (num < 100) {
-      trainBrain(num);
+    if (iterations < 10000) {
+      if (!training) {
+        isTraining(true);
+      }
+
+      trainBrain();
+      iterations += br.options.iterations;
     } else {
-      alert('Training complete.');
+      iterations = 'Training complete.';
+
+      isTraining(false);
     }
   };
 
@@ -106,7 +115,7 @@ const Brain = function() {
         break;
       case 'line':
         type = lineData;
-        max  = lineMax;
+        max  = weatherMax;
         break;
       case 'stock':
         type = stockData;
@@ -121,6 +130,7 @@ const Brain = function() {
     setAverage([]);
     setType(e.target.value);
     toggleAverage(false);
+    iterations = '';
   };
 
   var renderChart = function() {
@@ -135,7 +145,11 @@ const Brain = function() {
     <div className='visualContainer v'>
       <div className='brainHeader h'>
         <h3>brain.js - timeseries</h3>
+
         <div className='brainButtons h'>
+          <div className='trainingInfo h'>
+            {iterations}
+          </div>
           <select id='dataset' onChange={changeData}>
             <option value={'stock'}>  stock</option>
             <option value={'weather'}>weather</option>
